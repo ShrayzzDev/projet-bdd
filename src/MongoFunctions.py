@@ -1,7 +1,15 @@
+# NOTE : Même si se fichier rassemble les fonctions pour MongoDB
+# Il fait appel à neo4j pour l'ajout/suppression car il faut que
+# le nouvel utilisateur/tweet appraiassent sur neo4j / il n'y soit plus aussi.
+# Pour éviter des problèmes d'oubli, les fonctions ici appellent 
+# directement neo4j au lieu de laisser l'utilisateur du fichier le faire
+# lui même.
+
 from pymongo import MongoClient
 import pandas as pd
 import csv
 from datetime import datetime
+import Neo4JFunctions as neo4j
 
 # Se connecte à la base en cloud et nous la retourne
 def get_database():
@@ -38,6 +46,7 @@ def init_db():
     db = get_database()
     results['users'] = import_csv_file(db, 'users', './Data/tw_user.csv')
     results['tweets'] = import_csv_file(db, 'tweets', './Data/tweet.csv','<')
+    return results
 
 def add_user(id_user, screen_name, name, description, location, lang):
     user = {
@@ -57,11 +66,15 @@ def add_user(id_user, screen_name, name, description, location, lang):
     db = get_database()
     collection = db['users']
     collection.insert_one(user)
+    neo4j.add_user(name, id_user)
 
 def delete_user(id_user):
     db = get_database()
     collection = db['users']
     collection.delete_many({ "idUser" : id_user })
+    # On a besoin de supprimer les relations liées à l'utilisateurs 
+    # dans la base neo4j
+    neo4j.delete_user_by_id(id_user)
 
 def get_user_by_id(user_id):
     db = get_database()
@@ -87,12 +100,14 @@ def add_tweet(id_tweet, id_user, text, source, lang, reply_id_tweet = "", reply_
     }
     db = get_database()
     collection = db['tweets']
+    neo4j.add_tweet(id_tweet)
     collection.insert_one(tweet)
 
 def delete_tweet(id_tweet):
     db = get_database()
     collection = db['tweets']
     collection.delete_many({ "idTweet" : id_tweet })
+    neo4j.delete_tweet_by_id(id_tweet)
 
 def get_tweet_by_id(tweet_id):
     db = get_database()
