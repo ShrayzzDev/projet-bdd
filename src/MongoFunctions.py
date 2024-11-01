@@ -48,7 +48,7 @@ def add_user(id_user, screen_name, name, description, location, lang):
         'location' : location,
         'lang' : lang,
         'url' : 'https://twitter.com/' + screen_name,
-        'createdAt' : datetime.today().strftime("DD/MM/YY"),
+        'createdAt' : datetime.today().strftime("%D"),
         'nbStatuses' : 0,
         'nbFavorites' : 0,
         'nbFollowers' : 0,
@@ -61,7 +61,7 @@ def add_user(id_user, screen_name, name, description, location, lang):
 def delete_user(id_user):
     db = get_database()
     collection = db['users']
-    collection.delete_one({ "idUser" : id_user })
+    collection.delete_many({ "idUser" : id_user })
 
 def get_user_by_id(user_id):
     db = get_database()
@@ -78,7 +78,7 @@ def add_tweet(id_tweet, id_user, text, source, lang, reply_id_tweet = "", reply_
         'quotedIdTweet' : quoted_id_tweet,
         'quotedIdUser' : quoted_id_user,
         'text' : text,
-        'createdAt' : datetime.today().strftime("DD/MM/YY"),
+        'createdAt' : datetime.today().strftime("%D"),
         'url' : 'https://twitter.com/' + user['screenName'] + '/status/' + id_tweet,
         'source' : source,
         'lang' : lang,
@@ -92,7 +92,7 @@ def add_tweet(id_tweet, id_user, text, source, lang, reply_id_tweet = "", reply_
 def delete_tweet(id_tweet):
     db = get_database()
     collection = db['tweets']
-    collection.delete_one({ "idTweet" : id_tweet })
+    collection.delete_many({ "idTweet" : id_tweet })
 
 def get_tweet_by_id(tweet_id):
     db = get_database()
