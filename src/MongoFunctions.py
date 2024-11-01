@@ -89,8 +89,12 @@ def add_tweet(id_tweet, id_user, text, source, lang, reply_id_tweet = "", reply_
     collection = db['tweets']
     collection.insert_one(tweet)
 
-def delete_user(id_tweet):
-
+def delete_tweet(id_tweet):
     db = get_database()
     collection = db['tweets']
     collection.delete_one({ "idTweet" : id_tweet })
+
+def get_tweet_by_id(tweet_id):
+    db = get_database()
+    collection = db['tweets']
+    return collection.find_one({ "idTweet" : tweet_id })
