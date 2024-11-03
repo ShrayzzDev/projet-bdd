@@ -1,7 +1,6 @@
 import dotenv
 import os
 from neo4j import GraphDatabase
-from MongoFunctions import increment_value
 import csv
 
 # Charge les identifiants et vérifie que la connexion est possible
@@ -153,8 +152,6 @@ def init_followers(file_path, separator="\t"):
                 follower=each['sourceIdUser'],
                 followed=each['targetIdUser']
             )
-            increment_value('users',{ 'idUser' : each['sourceIdUser']}, 'followers')
-            increment_value('users',{ 'idUser' : each['targetIdUser']}, 'followering')
             count += 1
 
         return count
