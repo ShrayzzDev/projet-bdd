@@ -122,3 +122,16 @@ def increment_value(collection, condition, which):
         condition,
         { '$inc': {which: 1}}
     )
+
+def follow_user(id_follower, id_followed):
+    db = get_database()
+    collection = db['users']
+    collection.find_one_and_update(
+        { "idUser" : id_follower },
+        { '$inc': {'nbFollowing': 1}}
+    )
+    collection.find_one_and_update(
+        { "idUser" : id_followed },
+        { '$inc': {'nbFollowers': 1}}
+    )
+    neo4j.user_follows_user(id_follower, id_followed)
