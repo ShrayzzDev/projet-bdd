@@ -113,3 +113,12 @@ def get_tweet_by_id(tweet_id):
     db = get_database()
     collection = db['tweets']
     return collection.find_one({ "idTweet" : tweet_id })
+
+# Augmente de 1 une valeur
+def increment_value(collection, condition, which):
+    db = get_database()
+    collection = db[collection]
+    collection.find_one_and_update(
+        condition,
+        { '$inc': {which: 1}}
+    )
