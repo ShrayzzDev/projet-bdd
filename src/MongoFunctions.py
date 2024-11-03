@@ -135,3 +135,8 @@ def follow_user(id_follower, id_followed):
         { '$inc': {'nbFollowers': 1}}
     )
     neo4j.user_follows_user(id_follower, id_followed)
+
+def get_likes_and_follower():
+    db = get_database()
+    collection = db['users']
+    return collection.find({},projection = {'nbFollowers':True, 'nbFavorites':True})
