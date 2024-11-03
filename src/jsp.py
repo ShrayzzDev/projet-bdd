@@ -9,6 +9,6 @@ def init_db():
     print(neo4j.import_tweets_csv('./Data/tweet.csv'))
 
 neo4j.init_connection()
-init_db()
+# init_db()
 
 graph.show_nb_followers_by_likes()

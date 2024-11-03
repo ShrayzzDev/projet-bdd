@@ -12,7 +12,7 @@ def show_nb_followers_by_likes():
         listFollowers.append(each['nbFollowers'])
         listLikes.append(each['nbFavorites'])
     
-    plt.plot(listLikes,listFollowers)
+    plt.scatter(listLikes,listFollowers)
     plt.title('nombre de likes par nombres de followers')
 
     plt.show()
